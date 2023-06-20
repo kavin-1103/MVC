@@ -1,0 +1,66 @@
+﻿@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Menu Items</h1>
+<div class="container">
+    <form  method="post" >
+        
+            <table class="table table-striped table-success">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var menuItem in Model)
+                {
+                    <tr>
+                        <td name="ItemName">@menuItem.Name</td>
+                        <td >@menuItem.Description</td>
+                        <td >@menuItem.Price</td>
+                        <td>
+                            <input type="number" class="form-control quantity-input" name="quantities[@menuItem.MenuID]" min="0" max="10" value="0" data-price="@menuItem.Price" />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div>
+            <button type="button" class="btn btn-primary" onclick="calculateTotal()">Calculate Total</button>
+            <h4>Total: <span id="totalAmount">@ViewBag.Total</span></h4>
+        </div>
+        <div>
+            <button type="submit" class="btn btn-success" asp-controller="OrderItems" asp-action="Edit" asp-route-tableId="@ViewData["TableId"]">Confirm Order</button>
+        </div>
+
+
+    </form>
+</div>
+
+<script>
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const tableId = urlParams.get("tableId");
+
+    // Set the tableId in the asp-route-tableId attribute of the button
+    const confirmOrderButton = document.querySelector(".btn-success");
+    confirmOrderButton.setAttribute("asp-route-tableId", tableId);
+
+    function calculateTotal() {
+        var inputs = document.getElementsByClassName("quantity-input");
+        var total = 0;
+
+        for (var i = 0; i < inputs.length; i++){
+            var quantity = parseInt(inputs[i].value);
+            var price = parseFloat(inputs[i].getAttribute("data-price"));
+
+            total += quantity * price;
+        }
+
+        document.getElementById("totalAmount").innerHTML = total.toFixed(2);
+    }
+</script>

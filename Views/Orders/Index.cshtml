@@ -1,0 +1,22 @@
+﻿@model IEnumerable<Reservation_Management.Models.Orders>
+
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Place Orders</h1>
+<br />
+<h2 class="align-content-center">
+    <p > AVAILABLE TABLES </p>
+</h2>
+<div class="container">
+    <div class="row">
+        @foreach (var buttonName in Model)
+        {
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <button class="btn btn-primary">@buttonName</button>
+            </div>
+        }
+    </div>
+</div>
